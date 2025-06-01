@@ -5,6 +5,7 @@ import { render, screen, waitFor, } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Orders } from './Orders'
 import { getOrders } from '../../services/getOrders'
+import { getSummaryOrders } from '../../utils/sumamry'
 
 vi.mock('../../services/getOrders', () => ({
     getOrders: vi.fn()
@@ -84,7 +85,21 @@ describe('<Orders />', () => {
 
         await waitFor(() => {
             const orders = screen.getAllByRole('heading', { level: 3 });
-            expect(orders).toHaveLength(mockOrders.length + 1)
+            expect(orders).toHaveLength(mockOrders.length)
+
+        })
+    })
+
+    it('deberia mostrar seccion para superadmins', async () => {
+        mockGetOrders.mockResolvedValue(mockOrders)
+        handleRenderOrders('superadmin')
+
+        await waitFor(() => {
+            const { totalOrders, averageOrderValue } = getSummaryOrders(mockOrders)
+            const totalOrdersElement = screen.getByTestId("totalOrders").textContent
+            const averageOrderValueElement = screen.getByTestId("averageOrderValue").textContent
+            expect(totalOrdersElement).toBe(totalOrders.toString())
+            expect(averageOrderValueElement).toBe('$' + averageOrderValue.toString())
 
         })
     })
