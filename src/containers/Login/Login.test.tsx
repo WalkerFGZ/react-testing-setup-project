@@ -1,8 +1,8 @@
-import { MemoryRouter, useNavigate } from "react-router-dom";
 import { Mock, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { Login } from "./Login";
+import { MemoryRouter } from "react-router-dom";
 import { SessionProvider } from "../../context/AuthContext";
 import { getAuth } from "../../services/getAuth";
 
@@ -33,7 +33,7 @@ describe("<Login />", () => {
         );
     };
 
-    it.skip("Debería mostrar un mensaje de error", async () => {
+    it("Debería mostrar un mensaje de error", async () => {
         mockGetAuth.mockRejectedValue(new Error("Invalid credentials"));
         handleLogin();
         const usernameInput = screen.getByPlaceholderText("Username");
@@ -53,7 +53,7 @@ describe("<Login />", () => {
         expect(errorMessage).toBeInTheDocument();
     });
 
-    it.skip("Debería redirigir /orders", async () => {
+    it("Debería redirigir /orders", async () => {
         mockGetAuth.mockResolvedValue({ success: true })
         handleLogin();
 
@@ -76,7 +76,7 @@ describe("<Login />", () => {
 
     });
 
-    it.skip('Debería mostar la contraseña', async () => {
+    it('Debería mostar la contraseña', async () => {
         handleLogin();
         const passwordInput = screen.getByPlaceholderText("Password");
         const buttonShowPassword = screen.getByRole("button", {
